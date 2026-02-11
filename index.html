@@ -1,111 +1,33 @@
-
-
-```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Bakso Configurator</title>
+<title>Kuli-Bakso Configurator</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-:root {
-  --primary:#e63946;
-  --accent:#2a9d8f;
-  --bg:#121212;
-  --card:#1e1e1e;
-}
-body {
-  font-family:'Poppins',sans-serif;
-  margin:0;
-  background:var(--bg);
-  color:#f5f5f5;
-}
-header {
-  background:var(--primary);
-  color:white;
-  padding:30px;
-  text-align:center;
-  animation: neonPulse 2s infinite;
-}
-@keyframes neonPulse {
-  0% { text-shadow:0 0 5px #fff,0 0 10px #fff,0 0 20px var(--primary); }
-  50% { text-shadow:0 0 20px #fff,0 0 40px var(--primary),0 0 60px var(--primary); }
-  100% { text-shadow:0 0 5px #fff,0 0 10px #fff,0 0 20px var(--primary); }
-}
-.container {
-  max-width:900px;
-  margin:40px auto;
-  background:var(--card);
-  padding:30px;
-  border-radius:20px;
-  box-shadow:0 0 30px rgba(230,57,70,0.5);
-  animation: fadeUp 1s ease forwards;
-}
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(30px); }
-  to { opacity:1; transform:translateY(0); }
-}
-h2 { color:var(--accent); margin-top:0; }
-select {
-  width:100%;
-  padding:12px;
-  margin:10px 0;
-  border-radius:12px;
-  border:1px solid var(--primary);
-  background:#2a2a2a;
-  color:#fff;
-  transition:0.3s;
-}
-select:hover {
-  box-shadow:0 0 15px var(--primary);
-  transform:scale(1.05);
-}
-.preview {
-  background:#2a2a2a;
-  padding:20px;
-  border-radius:12px;
-  margin-top:20px;
-  animation: glowBox 2s infinite alternate;
-}
-@keyframes glowBox {
-  from { box-shadow:0 0 10px var(--accent); }
-  to { box-shadow:0 0 30px var(--accent); }
-}
-button {
-  background:var(--primary);
-  color:white;
-  border:none;
-  padding:15px;
-  border-radius:12px;
-  width:100%;
-  font-size:16px;
-  cursor:pointer;
-  margin-top:10px;
-  transition:0.3s;
-}
-button:hover {
-  box-shadow:0 0 20px var(--primary);
-  transform:scale(1.1);
-}
-.price {
-  font-size:22px;
-  font-weight:bold;
-  color:var(--accent);
-  margin-top:15px;
-  text-shadow:0 0 10px var(--accent);
-}
+body { font-family:'Poppins',sans-serif; margin:0; background:#121212; color:#f5f5f5; }
+header { background:#e63946; color:white; padding:20px; text-align:center; }
+.container { max-width:900px; margin:30px auto; background:#1e1e1e; padding:30px; border-radius:20px; box-shadow:0 0 30px rgba(230,57,70,0.5); }
+h2 { color:#2a9d8f; }
+select { width:100%; padding:12px; margin:10px 0; border-radius:12px; border:1px solid #e63946; background:#2a2a2a; color:#fff; }
+select:hover { box-shadow:0 0 15px #e63946; transform:scale(1.05); }
+.preview { background:#2a2a2a; padding:20px; border-radius:12px; margin-top:20px; }
+button { background:#e63946; color:white; border:none; padding:15px; border-radius:12px; width:100%; font-size:16px; cursor:pointer; margin-top:10px; }
+button:hover { box-shadow:0 0 20px #e63946; transform:scale(1.05); }
+.price { font-size:22px; font-weight:bold; color:#2a9d8f; margin-top:15px; text-shadow:0 0 10px #2a9d8f; }
+.qr-box { text-align:center; margin-top:20px; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Bakso Configurator</h1>
+  <h1>Kuli-Bakso</h1>
   <p>Rakit Bakso Sesuai Selera Kamu 🍲</p>
 </header>
 
-<div class="container">
+<div class="container" id="configPage">
   <h2>1. Pilih Isi Bakso</h2>
-  <select id="isi" onchange="updatePrice()">
+  <select id="isi">
     <option value="Daging Sapi" data-price="15000">Daging Sapi (+15k)</option>
     <option value="Ayam" data-price="12000">Ayam (+12k)</option>
     <option value="Ikan" data-price="13000">Ikan (+13k)</option>
@@ -114,8 +36,8 @@ button:hover {
     <option value="Smoked Cheese" data-price="22000">Smoked Cheese (+22k)</option>
   </select>
 
-  <h2>2. Pilih Tekstur Tepung</h2>
-  <select id="tepung" onchange="updatePrice()">
+  <h2>2. Pilih Tepung</h2>
+  <select id="tepung">
     <option value="Kanji" data-price="0">Kanji (Gratis)</option>
     <option value="Terigu" data-price="2000">Terigu (+2k)</option>
     <option value="Singkong" data-price="3000">Singkong (+3k)</option>
@@ -123,8 +45,8 @@ button:hover {
   </select>
 
   <h2>3. Pilih Kuah</h2>
-  <select id="kuah" onchange="updatePrice()">
-    <option value="Kaldu Sapi" data-price="0">Kaldu Sapi Klasik (Gratis)</option>
+  <select id="kuah">
+    <option value="Kaldu Sapi" data-price="0">Kaldu Sapi (Gratis)</option>
     <option value="Tom Yum" data-price="5000">Tom Yum (+5k)</option>
     <option value="Miso Jepang" data-price="7000">Miso Jepang (+7k)</option>
     <option value="Sichuan" data-price="7000">Sichuan Pedas (+7k)</option>
@@ -132,7 +54,7 @@ button:hover {
   </select>
 
   <h2>4. Pilih Mie</h2>
-  <select id="mie" onchange="updatePrice()">
+  <select id="mie">
     <option value="Mie Kuning" data-price="0">Mie Kuning (Gratis)</option>
     <option value="Bihun" data-price="2000">Bihun (+2k)</option>
     <option value="Kwetiau" data-price="3000">Kwetiau (+3k)</option>
@@ -142,7 +64,7 @@ button:hover {
   </select>
 
   <h2>5. Pilih Topping</h2>
-  <select id="topping" multiple size="6" onchange="updatePrice()">
+  <select id="topping" multiple size="7">
     <option value="Siomay Goreng" data-price="5000">Siomay Goreng (+5k)</option>
     <option value="Dimsum Keju" data-price="7000">Dimsum Keju (+7k)</option>
     <option value="Udang Keju" data-price="8000">Udang Keju (+8k)</option>
@@ -152,54 +74,69 @@ button:hover {
     <option value="Telur Rebus" data-price="3000">Telur Rebus (+3k)</option>
   </select>
 
-  <div class="preview" id="preview">
-    <strong>Preview Pesanan:</strong><br>
-    Belum ada pilihan.
-  </div>
-
+  <div class="preview" id="preview"></div>
   <div class="price" id="totalPrice">Total: IDR 0</div>
 
-  <button onclick="previewOrder()">Lihat Pesanan</button>
-  <button onclick="placeOrder()">Pesan via WhatsApp</button>
+  <button onclick="goToPayment()">Lanjut ke Payment</button>
 </div>
 
+<div class="container" id="paymentPage" style="display:none;">
+  <h2>Halaman Pembayaran</h2>
+  <p>Silakan pilih metode pembayaran:</p>
+  <button onclick="generateCashQR()">Bayar via Tunai (QR)</button>
+  <button disabled style="background:#555;">QRIS (Coming Soon)</button>
+  <div class="qr-box" id="qrBox"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
-function updatePrice(){
+function updatePreview(){
   let total = 0;
   const isi = document.getElementById("isi");
   total += parseInt(isi.selectedOptions[0].dataset.price);
-
   const tepung = document.getElementById("tepung");
   total += parseInt(tepung.selectedOptions[0].dataset.price);
-
   const kuah = document.getElementById("kuah");
   total += parseInt(kuah.selectedOptions[0].dataset.price);
-
   const mie = document.getElementById("mie");
   total += parseInt(mie.selectedOptions[0].dataset.price);
-
   const topping = Array.from(document.getElementById("topping").selectedOptions);
   topping.forEach(opt => total += parseInt(opt.dataset.price));
 
-  animatePrice(total);
+  const preview = `
+    <strong>Pesanan:</strong><br>
+    Isi: ${isi.value}<br>
+    Tepung: ${tepung.value}<br>
+    Kuah: ${kuah.value}<br>
+    Mie: ${mie.value}<br>
+    Topping: ${topping.map(o=>o.value).join(", ") || "Tanpa topping"}
+  `;
+  document.getElementById("preview").innerHTML = preview;
+  document.getElementById("totalPrice").innerText = "Total: IDR " + total.toLocaleString();
 }
 
-function animatePrice(newPrice) {
-  let current = 0;
-  const step = Math.ceil(newPrice / 30);
-  const display = document.getElementById("totalPrice");
-  const interval = setInterval(() => {
-    current += step;
-    if (current >= newPrice) {
-      current = newPrice;
-      clearInterval(interval);
-    }
-    display.innerText = "Total: IDR " + current.toLocaleString();
-  }, 20);
+// jalankan updatePreview setiap kali ada perubahan
+document.querySelectorAll("select").forEach(sel => sel.addEventListener("change", updatePreview));
+// jalankan sekali saat load
+updatePreview();
+
+function goToPayment(){
+  document.getElementById("configPage").style.display="none";
+  document.getElementById("paymentPage").style.display="block";
 }
 
-function previewOrder(){
-  const isi = document.getElementById("isi").value;
-  const tepung = document.getElementById("tepung").value;
-  const kuah = document.getElementById
+function generateCashQR(){
+  const qrBox = document.getElementById("qrBox");
+  qrBox.innerHTML = "";
+  const total = document.getElementById("totalPrice").innerText;
+  const order = document.getElementById("preview").innerText;
+  const text = `Pesanan Kuli-Bakso\n${order}\n${total}\nBayar di Counter`;
+  QRCode.toCanvas(text, {width:200}, function(err, canvas){
+    if(err) console.error(err);
+    qrBox.appendChild(canvas);
+  });
+}
+</script>
 
+</body>
+</html>
