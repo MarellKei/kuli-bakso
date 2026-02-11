@@ -16,6 +16,7 @@ button { background:#e63946; color:white; border:none; padding:15px; border-radi
 button:hover { box-shadow:0 0 20px #e63946; transform:scale(1.05); }
 .price { font-size:22px; font-weight:bold; color:#2a9d8f; margin-top:15px; text-shadow:0 0 10px #2a9d8f; }
 .qr-box { text-align:center; margin-top:20px; }
+.secret { margin-top:15px; padding:15px; border-radius:12px; background:#2a9d8f; color:#121212; font-weight:bold; display:none; }
 </style>
 </head>
 <body>
@@ -26,6 +27,17 @@ button:hover { box-shadow:0 0 20px #e63946; transform:scale(1.05); }
 </header>
 
 <div class="container" id="configPage">
+
+  <!-- TEMPLATE -->
+  <h2>Template Bakso (Pilih Salah Satu)</h2>
+  <select id="template" onchange="applyTemplate()">
+    <option value="none">-- Pilih Template --</option>
+    <option value="classic">Classic Bakso Sapi</option>
+    <option value="spicy">Spicy Tom Yum</option>
+    <option value="cheesy">Cheesy Mozzarella</option>
+    <option value="healthy">Healthy Green</option>
+  </select>
+
   <h2>1. Pilih Isi Bakso</h2>
   <select id="isi">
     <option value="Daging Sapi" data-price="15000">Daging Sapi (+15k)</option>
@@ -82,6 +94,18 @@ button:hover { box-shadow:0 0 20px #e63946; transform:scale(1.05); }
 
 <div class="container" id="paymentPage" style="display:none;">
   <h2>Halaman Pembayaran</h2>
+
+  <div class="preview" id="resultPreview"></div>
+  <div class="price" id="resultPrice"></div>
+
+  <div class="preview">
+    <strong id="uniqueScore">Uniqueness: 0 / 100</strong>
+  </div>
+
+  <div class="secret" id="secretIngredient">
+    🎉 Kamu mendapatkan <strong>Secret Ingredient GRATIS</strong>!
+  </div>
+
   <p>Silakan pilih metode pembayaran:</p>
   <button onclick="generateCashQR()">Bayar via Tunai (QR)</button>
   <button disabled style="background:#555;">QRIS (Coming Soon)</button>
@@ -117,19 +141,114 @@ function updatePreview(){
 
 // jalankan updatePreview setiap kali ada perubahan
 document.querySelectorAll("select").forEach(sel => sel.addEventListener("change", updatePreview));
-// jalankan sekali saat load
 updatePreview();
+
+function applyTemplate(){
+  const template = document.getElementById("template").value;
+
+  if(template === "classic"){
+    document.getElementById("isi").value = "Daging Sapi";
+    document.getElementById("tepung").value = "Kanji";
+    document.getElementById("kuah").value = "Kaldu Sapi";
+    document.getElementById("mie").value = "Mie Kuning";
+  } else if(template === "spicy"){
+    document.getElementById("isi").value = "Udang";
+    document.getElementById("tepung").value = "Terigu";
+    document.getElementById("kuah").value = "Tom Yum";
+    document.getElementById("mie").value = "Ramen";
+  } else if(template === "cheesy"){
+    document.getElementById("isi").value = "Mozzarella";
+    document.getElementById("tepung").value = "Singkong";
+    document.getElementById("kuah").value = "Miso Jepang";
+    document.getElementById("mie").value = "Mie Kuning";
+  } else if(template === "healthy"){
+    document.getElementById("isi").value = "Ikan";
+    document.getElementById("tepung").value = "Oat";
+    document.getElementById("kuah").value = "Herbal";
+    document.getElementById("mie").value = "Mie Bayam";
+  }
+
+  updatePreview();
+}
 
 function goToPayment(){
   document.getElementById("configPage").style.display="none";
   document.getElementById("paymentPage").style.display="block";
+
+  const isi = document.getElementById("isi");
+  const tepung = document.getElementById("tepung");
+  const kuah = document.getElementById("kuah");
+  const mie = document.getElementById("mie");
+  const topping = Array.from(document.getElementById("topping").selectedOptions);
+
+  const total = parseInt(isi.selectedOptions[0].dataset.price)
+              + parseInt(tepung.selectedOptions[0].dataset.price)
+              + parseInt(kuah.selectedOptions[0].dataset.price)
+              + parseInt(mie.selectedOptions[0].dataset.price)
+              + topping.reduce((sum, opt)=> sum + parseInt(opt.dataset.price), 0);
+
+  const resultPreview = `
+    <strong>Pesanan:</strong><br>
+    Isi: ${isi.value}<br>
+    Tepung: ${tepung.value}<br>
+    Kuah: ${kuah.value}<br>
+    Mie: ${mie.value}<br>
+    Topping: ${topping.map(o=>o.value).join(", ") || "Tanpa topping"}
+  `;
+  document.getElementById("resultPreview").innerHTML = resultPreview;
+  document.getElementById("resultPrice").innerText = "Total: IDR " + total.toLocaleString();
+
+  const uniqueScore = calculateUniqueness(isi.value, tepung.value, kuah.value, mie.value, topping);
+  document.getElementById("uniqueScore").innerText = "Uniqueness: " + uniqueScore + " / 100";
+
+  if(uniqueScore > 50){
+    document.getElementById("secretIngredient").style.display = "block";
+  } else {
+    document.getElementById("secretIngredient").style.display = "none";
+  }
+}
+
+function calculateUniqueness(isi, tepung, kuah, mie, topping){
+  let score = 0;
+  const weights = {
+    "Daging Sapi": 20,
+    "Ayam": 15,
+    "Ikan": 18,
+    "Udang": 25,
+    "Mozzarella": 30,
+    "Smoked Cheese": 35,
+    "Kanji": 5,
+    "Terigu": 10,
+    "Singkong": 15,
+    "Oat": 20,
+    "Kaldu Sapi": 5,
+    "Tom Yum": 20,
+    "Miso Jepang": 25,
+    "Sichuan": 30,
+    "Herbal": 15,
+    "Mie Kuning": 5,
+    "Bihun": 10,
+    "Kwetiau": 15,
+    "Ramen": 20,
+    "Shirataki": 25,
+    "Mie Bayam": 18
+  };
+
+  score += weights[isi] || 0;
+  score += weights[tepung] || 0;
+  score += weights[kuah] || 0;
+  score += weights[mie] || 0;
+  topping.forEach(opt => score += (weights[opt.value] || 5));
+
+  score = Math.min(100, Math.round(score / 2));
+  return score;
 }
 
 function generateCashQR(){
   const qrBox = document.getElementById("qrBox");
   qrBox.innerHTML = "";
-  const total = document.getElementById("totalPrice").innerText;
-  const order = document.getElementById("preview").innerText;
+  const total = document.getElementById("resultPrice").innerText;
+  const order = document.getElementById("resultPreview").innerText;
   const text = `Pesanan Kuli-Bakso\n${order}\n${total}\nBayar di Counter`;
   QRCode.toCanvas(text, {width:200}, function(err, canvas){
     if(err) console.error(err);
