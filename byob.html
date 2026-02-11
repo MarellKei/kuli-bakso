@@ -1,0 +1,204 @@
+Berikut versi lengkap **Bakso Configurator** dengan **dark UI** dan **animasi over-the-top**. Website ini punya efek neon glow, transisi dramatis, dan harga otomatis dengan animasi *count-up*.
+
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Bakso Configurator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+  --primary:#e63946;
+  --accent:#2a9d8f;
+  --bg:#121212;
+  --card:#1e1e1e;
+}
+body {
+  font-family:'Poppins',sans-serif;
+  margin:0;
+  background:var(--bg);
+  color:#f5f5f5;
+}
+header {
+  background:var(--primary);
+  color:white;
+  padding:30px;
+  text-align:center;
+  animation: neonPulse 2s infinite;
+}
+@keyframes neonPulse {
+  0% { text-shadow:0 0 5px #fff,0 0 10px #fff,0 0 20px var(--primary); }
+  50% { text-shadow:0 0 20px #fff,0 0 40px var(--primary),0 0 60px var(--primary); }
+  100% { text-shadow:0 0 5px #fff,0 0 10px #fff,0 0 20px var(--primary); }
+}
+.container {
+  max-width:900px;
+  margin:40px auto;
+  background:var(--card);
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 0 30px rgba(230,57,70,0.5);
+  animation: fadeUp 1s ease forwards;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(30px); }
+  to { opacity:1; transform:translateY(0); }
+}
+h2 { color:var(--accent); margin-top:0; }
+select {
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:12px;
+  border:1px solid var(--primary);
+  background:#2a2a2a;
+  color:#fff;
+  transition:0.3s;
+}
+select:hover {
+  box-shadow:0 0 15px var(--primary);
+  transform:scale(1.05);
+}
+.preview {
+  background:#2a2a2a;
+  padding:20px;
+  border-radius:12px;
+  margin-top:20px;
+  animation: glowBox 2s infinite alternate;
+}
+@keyframes glowBox {
+  from { box-shadow:0 0 10px var(--accent); }
+  to { box-shadow:0 0 30px var(--accent); }
+}
+button {
+  background:var(--primary);
+  color:white;
+  border:none;
+  padding:15px;
+  border-radius:12px;
+  width:100%;
+  font-size:16px;
+  cursor:pointer;
+  margin-top:10px;
+  transition:0.3s;
+}
+button:hover {
+  box-shadow:0 0 20px var(--primary);
+  transform:scale(1.1);
+}
+.price {
+  font-size:22px;
+  font-weight:bold;
+  color:var(--accent);
+  margin-top:15px;
+  text-shadow:0 0 10px var(--accent);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Bakso Configurator</h1>
+  <p>Rakit Bakso Sesuai Selera Kamu 🍲</p>
+</header>
+
+<div class="container">
+  <h2>1. Pilih Isi Bakso</h2>
+  <select id="isi" onchange="updatePrice()">
+    <option value="Daging Sapi" data-price="15000">Daging Sapi (+15k)</option>
+    <option value="Ayam" data-price="12000">Ayam (+12k)</option>
+    <option value="Ikan" data-price="13000">Ikan (+13k)</option>
+    <option value="Udang" data-price="18000">Udang (+18k)</option>
+    <option value="Mozzarella" data-price="20000">Keju Mozzarella (+20k)</option>
+    <option value="Smoked Cheese" data-price="22000">Smoked Cheese (+22k)</option>
+  </select>
+
+  <h2>2. Pilih Tekstur Tepung</h2>
+  <select id="tepung" onchange="updatePrice()">
+    <option value="Kanji" data-price="0">Kanji (Gratis)</option>
+    <option value="Terigu" data-price="2000">Terigu (+2k)</option>
+    <option value="Singkong" data-price="3000">Singkong (+3k)</option>
+    <option value="Oat" data-price="5000">Oat (+5k)</option>
+  </select>
+
+  <h2>3. Pilih Kuah</h2>
+  <select id="kuah" onchange="updatePrice()">
+    <option value="Kaldu Sapi" data-price="0">Kaldu Sapi Klasik (Gratis)</option>
+    <option value="Tom Yum" data-price="5000">Tom Yum (+5k)</option>
+    <option value="Miso Jepang" data-price="7000">Miso Jepang (+7k)</option>
+    <option value="Sichuan" data-price="7000">Sichuan Pedas (+7k)</option>
+    <option value="Herbal" data-price="4000">Herbal Bening (+4k)</option>
+  </select>
+
+  <h2>4. Pilih Mie</h2>
+  <select id="mie" onchange="updatePrice()">
+    <option value="Mie Kuning" data-price="0">Mie Kuning (Gratis)</option>
+    <option value="Bihun" data-price="2000">Bihun (+2k)</option>
+    <option value="Kwetiau" data-price="3000">Kwetiau (+3k)</option>
+    <option value="Ramen" data-price="5000">Ramen (+5k)</option>
+    <option value="Shirataki" data-price="7000">Shirataki (+7k)</option>
+    <option value="Mie Bayam" data-price="4000">Mie Hijau Bayam (+4k)</option>
+  </select>
+
+  <h2>5. Pilih Topping</h2>
+  <select id="topping" multiple size="6" onchange="updatePrice()">
+    <option value="Siomay Goreng" data-price="5000">Siomay Goreng (+5k)</option>
+    <option value="Dimsum Keju" data-price="7000">Dimsum Keju (+7k)</option>
+    <option value="Udang Keju" data-price="8000">Udang Keju (+8k)</option>
+    <option value="Spring Roll" data-price="6000">Spring Roll (+6k)</option>
+    <option value="Pangsit" data-price="4000">Pangsit (+4k)</option>
+    <option value="Jamur Crispy" data-price="5000">Jamur Crispy (+5k)</option>
+    <option value="Telur Rebus" data-price="3000">Telur Rebus (+3k)</option>
+  </select>
+
+  <div class="preview" id="preview">
+    <strong>Preview Pesanan:</strong><br>
+    Belum ada pilihan.
+  </div>
+
+  <div class="price" id="totalPrice">Total: IDR 0</div>
+
+  <button onclick="previewOrder()">Lihat Pesanan</button>
+  <button onclick="placeOrder()">Pesan via WhatsApp</button>
+</div>
+
+<script>
+function updatePrice(){
+  let total = 0;
+  const isi = document.getElementById("isi");
+  total += parseInt(isi.selectedOptions[0].dataset.price);
+
+  const tepung = document.getElementById("tepung");
+  total += parseInt(tepung.selectedOptions[0].dataset.price);
+
+  const kuah = document.getElementById("kuah");
+  total += parseInt(kuah.selectedOptions[0].dataset.price);
+
+  const mie = document.getElementById("mie");
+  total += parseInt(mie.selectedOptions[0].dataset.price);
+
+  const topping = Array.from(document.getElementById("topping").selectedOptions);
+  topping.forEach(opt => total += parseInt(opt.dataset.price));
+
+  animatePrice(total);
+}
+
+function animatePrice(newPrice) {
+  let current = 0;
+  const step = Math.ceil(newPrice / 30);
+  const display = document.getElementById("totalPrice");
+  const interval = setInterval(() => {
+    current += step;
+    if (current >= newPrice) {
+      current = newPrice;
+      clearInterval(interval);
+    }
+    display.innerText = "Total: IDR " + current.toLocaleString();
+  }, 20);
+}
+
+function previewOrder(){
+  const isi = document.getElementById("isi").value;
+  const tepung = document.getElementById("tepung").value;
+  const kuah = document.getElementById
